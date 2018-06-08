@@ -1,0 +1,9 @@
+10.40.18.7 | UNREACHABLE! => {
+    "changed": false, 
+    "msg": "ERROR! SSH encountered an unknown error during the connection. We recommend you re-run the command using -vvvv, which will enable SSH debugging output to help diagnose the issue", 
+    "unreachable": true
+}
+10.40.18.13 | FAILED | rc=0 >>
+MODULE FAILURE
+10.40.18.4 | FAILED | rc=0 >>
+MODULE FAILURE
