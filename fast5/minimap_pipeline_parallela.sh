@@ -70,11 +70,11 @@ do
 
     
     #copy and untar fast5
-    echo "copying and untaring $prefix"
-    cp $FAST5TAR $FAST5TARLOCAL
-    mkdir $FAST5EXTRACT
-    tar xf $FAST5TARLOCAL -C $FAST5EXTRACT 
-    rm $FAST5TARLOCAL
+#    echo "copying and untaring $prefix"
+#    cp $FAST5TAR $FAST5TARLOCAL
+#    mkdir $FAST5EXTRACT
+#    tar xf $FAST5TARLOCAL -C $FAST5EXTRACT 
+#    rm $FAST5TARLOCAL
         
     #copy and uncompress fastq
     cp $FASTQGZ $FASTQGZLOCAL
@@ -92,18 +92,18 @@ do
     
     (
     #index
-    /usr/bin/time -v $NANOPOLISH index -d $FAST5EXTRACT $FASTQLOCAL 2> $LOGLOCAL
+    #/usr/bin/time -v $NANOPOLISH index -d $FAST5EXTRACT $FASTQLOCAL 2> $LOGLOCAL
 
     #minimap
     /usr/bin/time -v $MINIMAP -x map-ont -a -t4 -K20M --secondary=no  --multi-prefix=$TMP $REFIDX $FASTQLOCAL > $SAMLOCAL 2>> $LOGLOCAL
 
 
     #sorting
-    /usr/bin/time -v $SAMTOOLS sort -@3 $SAMLOCAL > $BAMLOCAL 2>> $LOGLOCAL
-    /usr/bin/time -v $SAMTOOLS index $BAMLOCAL 2>> $LOGLOCAL
+    #/usr/bin/time -v $SAMTOOLS sort -@3 $SAMLOCAL > $BAMLOCAL 2>> $LOGLOCAL
+    #/usr/bin/time -v $SAMTOOLS index $BAMLOCAL 2>> $LOGLOCAL
 
     #methylation
-    /usr/bin/time -v $NANOPOLISH call-methylation -t 4 -r  $FASTQLOCAL -g $REF -b $BAMLOCAL -K 4096 > $METHLOCAL  2>> $LOGLOCAL    
+    #/usr/bin/time -v $NANOPOLISH call-methylation -t 4 -r  $FASTQLOCAL -g $REF -b $BAMLOCAL -K 4096 > $METHLOCAL  2>> $LOGLOCAL    
     )&
     
     processpid=$!;
@@ -113,15 +113,16 @@ do
     echo "I am waiting till $processpid finishes before copying the result for $prefix"
     anywait $processpid
     echo "$processpid finished, so I am copying the result for $prefix"
-    cp $METHLOCAL $METH
-    cp $BAMLOCAL $BAM
-    cp $LOGLOCAL $LOG
+    #cp $METHLOCAL $METH
+    cp $SAMLOCAL $BAM
+    #cp $LOGLOCAL $LOG
         
     #remove the rest    
-    rm -rf $FAST5EXTRACT
-    rm "$FASTQLOCAL" #bad
-    rm $SAMLOCAL $BAMLOCAL $METHLOCAL 
-    rm $SCRATCH/*.tmp ##bad
+    #rm -rf $FAST5EXTRACT
+    rm "$FASTQLOCAL"
+    rm $SAMLOCAL
+	#rm $SAMLOCAL $BAMLOCAL $METHLOCAL $LOGLOCAL
+    #rm $SCRATCH/*.tmp ##bad
     echo "result copy finished for $prefix"
     )&
     

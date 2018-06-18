@@ -80,7 +80,9 @@ do
     cp $FASTQGZ $FASTQGZLOCAL
     gunzip $FASTQGZLOCAL
     echo "copying and untaring $prefix done"
-    
+ 
+    #index
+    /usr/bin/time -v $NANOPOLISH index -d $FAST5EXTRACT $FASTQLOCAL 2> $LOGLOCAL 
     
     if [ $firstflag -eq 1 ] 
     then
@@ -91,8 +93,6 @@ do
     firstflag=1;    
     
     (
-    #index
-    /usr/bin/time -v $NANOPOLISH index -d $FAST5EXTRACT $FASTQLOCAL 2> $LOGLOCAL
 
     #minimap
     /usr/bin/time -v $MINIMAP -x map-ont -a -t4 -K20M --secondary=no  --multi-prefix=$TMP $REFIDX $FASTQLOCAL > $SAMLOCAL 2>> $LOGLOCAL
@@ -119,8 +119,8 @@ do
         
     #remove the rest    
     rm -rf $FAST5EXTRACT
-    rm "$FASTQLOCAL" #bad
-    rm $SAMLOCAL $BAMLOCAL $METHLOCAL 
+    #rm "$FASTQLOCAL*" bad
+    rm $SAMLOCAL $BAMLOCAL $METHLOCAL $LOGLOCAL
     rm $SCRATCH/*.tmp ##bad
     echo "result copy finished for $prefix"
     )&

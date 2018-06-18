@@ -67,18 +67,18 @@ do
     gunzip $FASTQGZLOCAL
         
     #index
-    $NANOPOLISH index -d $FAST5EXTRACT $FASTQLOCAL 2> $LOGLOCAL
+    /usr/bin/time -v $NANOPOLISH index -d $FAST5EXTRACT $FASTQLOCAL 2> $LOGLOCAL
 
     #minimap
-    $MINIMAP -x map-ont -a -t4 -K20M --secondary=no  --multi-prefix=$TMP $REFIDX $FASTQLOCAL > $SAMLOCAL 2>> $LOGLOCAL
+    /usr/bin/time -v $MINIMAP -x map-ont -a -t4 -K20M --secondary=no  --multi-prefix=$TMP $REFIDX $FASTQLOCAL > $SAMLOCAL 2>> $LOGLOCAL
 
 
     #sorting
-    $SAMTOOLS sort -@3 $SAMLOCAL > $BAMLOCAL 2>> $LOGLOCAL
-    $SAMTOOLS index $BAMLOCAL 2>> $LOGLOCAL
+    /usr/bin/time -v $SAMTOOLS sort -@3 $SAMLOCAL > $BAMLOCAL 2>> $LOGLOCAL
+    /usr/bin/time -v $SAMTOOLS index $BAMLOCAL 2>> $LOGLOCAL
 
     #methylation
-    $NANOPOLISH call-methylation -t 4 -r  $FASTQLOCAL -g $REF -b $BAMLOCAL -K 4096 > $METHLOCAL  2>> $LOGLOCAL    
+    /usr/bin/time -v $NANOPOLISH call-methylation -t 4 -r  $FASTQLOCAL -g $REF -b $BAMLOCAL -K 4096 > $METHLOCAL  2>> $LOGLOCAL    
 
 
     cp $METHLOCAL $METH
@@ -87,8 +87,8 @@ do
         
     #remove the rest    
     rm -rf $FAST5EXTRACT
-    #rm "$FASTQLOCAL*" bad
-    rm $SAMLOCAL $BAMLOCAL $METHLOCAL $LOGLOCAL
+    rm "$FASTQLOCAL" #bad
+    rm $SAMLOCAL $BAMLOCAL $METHLOCAL
     rm $SCRATCH/*.tmp ##bad
  
     
