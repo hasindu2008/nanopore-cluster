@@ -22,7 +22,7 @@ anywait(){
     done
 }
 
-cat /nanopore/scratch/dev.cfg| while read filepath
+while read filepath
 do
 
     #folder=${filepath%%.*}
@@ -126,7 +126,7 @@ do
     )&
     
 
-done
+done < /nanopore/scratch/dev.cfg
 
 wait
 

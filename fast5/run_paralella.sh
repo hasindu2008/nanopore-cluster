@@ -21,7 +21,7 @@ ls /mnt/778/778-5000ng/778-5000ng_albacore-2.1.3/fast5/* -lhS | awk '{if(NR%15==
 
 
 ansible all -m copy -a "src=fast5_pipeline_parallela.sh dest=/nanopore/bin/fast5_pipeline_parallela.sh mode=0755"
-/usr/bin/time -v ansible all -m shell -a "/nanopore/bin/fast5_pipeline_parallela.sh &> parallella.log" > log.txt 2> time.txt
+/usr/bin/time -v ansible all -m shell -a "/nanopore/bin/fast5_pipeline_parallela.sh > /nanopore/scratch/parallella.log 2>&1" > log.txt 2> time.txt
 ansible all -m shell -a "cd /nanopore/scratch && tar zcvf logs.tgz *.log"
 gather.sh /nanopore/scratch/logs.tgz logs/log tgz
 gather.sh /nanopore/scratch/dev.cfg logs/dev cfg
