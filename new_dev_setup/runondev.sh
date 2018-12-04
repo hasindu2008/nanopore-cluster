@@ -17,6 +17,8 @@ sed -i "s/rock64/$device/" /etc/hosts
 #echo "Australia/Sydney" > /etc/timezone
 #dpkg-reconfigure --frontend noninteractive tzdata
 dpkg-reconfigure tzdata
+echo "NTP=ntp1.unsw.edu.au" >> /etc/systemd/timesyncd.conf
+echo "server ntp1.unsw.edu.au" >> /etc/ntp.conf
 
 apt-get update && sudo apt-get upgrade -y
 apt-get install -y time nfs-common ganglia-monitor python
